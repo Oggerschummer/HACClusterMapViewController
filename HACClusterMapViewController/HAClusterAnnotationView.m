@@ -126,11 +126,28 @@ CGFloat HACScaledValueForValue(CGFloat value)
     UIColor *innerCircleFillColor;
     
     if ([self.annotation isKindOfClass:[HAClusterAnnotation class]]){
-        if (((HAClusterAnnotation*)self.annotation).count==1){
-        
-        innerCircleFillColor= ((HAClusterAnnotation*)self.annotation).fillColor ;
+        HAClusterAnnotation* anno = self.annotation;
+        if (anno.count==1){
+            @try {
+                if (anno.fillColor){
+                innerCircleFillColor= anno.fillColor ;
+                }
+                //innerCircleFillColor= [UIColor clearColor];
+
+            }
+            @catch (NSException *exception) {
+                innerCircleFillColor= [UIColor clearColor];
+            }
+            
         }else{
+            @try {
                 innerCircleFillColor= self.circleBackgroundColor;
+            }
+            @catch (NSException *exception) {
+                innerCircleFillColor= [UIColor clearColor];
+            }
+            
+            
         }
     }else{
         innerCircleFillColor= self.circleBackgroundColor;
