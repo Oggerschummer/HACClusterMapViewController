@@ -104,10 +104,14 @@
     }
 }
 
-- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(HAClusterAnnotationView *)view{
+//- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(HAClusterAnnotationView *)view{
+//    if ([view.annotation isKindOfClass:[HAClusterAnnotation class]]){
+//        HAClusterAnnotation *annotation = (HAClusterAnnotation *)view.annotation;
+
+- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     if ([view.annotation isKindOfClass:[HAClusterAnnotation class]]){
         HAClusterAnnotation *annotation = (HAClusterAnnotation *)view.annotation;
-        if (annotation.count == 1) {
+    if (annotation.count == 1) {
             [annotation updateSubtitleIfNeeded];
         }
         if (self.mapDelegate && [self.mapDelegate respondsToSelector:@selector(didSelectAnnotationView:)]) {
@@ -116,9 +120,7 @@
     }
 }
 
-- (void)mapView:(MKMapView *)mapView
-didDeselectAnnotationView:(MKAnnotationView *)view{
-    
+- (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
     if ([view.annotation isKindOfClass:[HAClusterAnnotation class]]){
         HAClusterAnnotation *annotation = (HAClusterAnnotation *)view.annotation;
         
@@ -130,10 +132,6 @@ didDeselectAnnotationView:(MKAnnotationView *)view{
             [self.mapDelegate didDeselectAnnotationView:(HAClusterAnnotationView *)view];
         }
     }
-
-    
-    
-    
 }
 
 - (void)addBounceAnnimationToView:(UIView *)view{
@@ -164,10 +162,14 @@ didDeselectAnnotationView:(MKAnnotationView *)view{
     [toRemove minusSet:after];
     
     [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-        [self addAnnotations:[toAdd allObjects]];
-        [self removeAnnotations:[toRemove allObjects]];
-        //Oggerschummer
-        
+        @try{
+            [self addAnnotations:[toAdd allObjects]];
+            [self removeAnnotations:[toRemove allObjects]];
+            //Oggerschummer
+        }
+        @catch (NSException *exception) {
+            //ignore
+        }
         if (self.mapDelegate && [self.mapDelegate respondsToSelector:@selector(didFinishAddingAnnotations)]) {
             [self.mapDelegate didFinishAddingAnnotations];
             
