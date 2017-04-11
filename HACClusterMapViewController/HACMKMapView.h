@@ -18,9 +18,11 @@ IB_DESIGNABLE
 -(void)viewForAnnotationView:(HAClusterAnnotationView *)annotationView annotation:(HAClusterAnnotation *)annotation;
 -(void)viewForAnnotationView:(HAClusterAnnotationView *)annotationView clusteredAnnotation:(HAClusterAnnotation *)annotation;
 -(UIColor*)fillColorForAnnotation:(HAClusterAnnotation *)annotation;
--(void)didSelectAnnotationView:(HAClusterAnnotationView *)annotationView;
+-(void)didSelectAnnotationView:(HAClusterAnnotation *)annotationView;
 -(void)didDeselectAnnotationView:(HAClusterAnnotationView *)annotationView;
 -(void)didFinishAddingAnnotations;
+-(MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id <MKOverlay>)overlay;
+
 @end
 
 @interface HACMKMapView : MKMapView <MKMapViewDelegate>

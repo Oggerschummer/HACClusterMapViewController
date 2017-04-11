@@ -46,8 +46,6 @@
     }];
 }
 
-
-
 - (MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
     if ([annotation isKindOfClass:[MKUserLocation class]])
         return nil;
@@ -104,9 +102,6 @@
     }
 }
 
-//- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(HAClusterAnnotationView *)view{
-//    if ([view.annotation isKindOfClass:[HAClusterAnnotation class]]){
-//        HAClusterAnnotation *annotation = (HAClusterAnnotation *)view.annotation;
 
 - (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     if ([view.annotation isKindOfClass:[HAClusterAnnotation class]]){
@@ -115,7 +110,7 @@
             [annotation updateSubtitleIfNeeded];
         }
         if (self.mapDelegate && [self.mapDelegate respondsToSelector:@selector(didSelectAnnotationView:)]) {
-            [self.mapDelegate didSelectAnnotationView:view];
+            [self.mapDelegate didSelectAnnotationView:annotation];
         }
     }
 }
@@ -123,15 +118,20 @@
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
     if ([view.annotation isKindOfClass:[HAClusterAnnotation class]]){
         HAClusterAnnotation *annotation = (HAClusterAnnotation *)view.annotation;
-        
-        
         if (annotation.count == 1) {
             [annotation updateSubtitleIfNeeded];
         }
         if (self.mapDelegate && [self.mapDelegate respondsToSelector:@selector(didDeselectAnnotationView:)]) {
             [self.mapDelegate didDeselectAnnotationView:(HAClusterAnnotationView *)view];
         }
-    }
+    }  
+}
+
+- (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id <MKOverlay>)overlay {
+    if (self.mapDelegate && [self.mapDelegate respondsToSelector:@selector(mapView:rendererForOverlay:)])
+        return [self.mapDelegate mapView:self rendererForOverlay:overlay];
+    else
+        return nil;
 }
 
 - (void)addBounceAnnimationToView:(UIView *)view{
